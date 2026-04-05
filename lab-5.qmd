@@ -7,6 +7,13 @@ categories: "Lab"
 
 In this lab you'll start your practice of statistical modelling. You'll fit models, interpret model output, and make decisions about your data and research question based on the model results.
 
+```{r}
+library(tidyverse) 
+library(tidymodels)
+library(dplyr)
+library(openintro)
+```
+
 ## Guidelines
 
 Your plots should include an informative title, axes should be labeled, and careful consideration should be given to aesthetic choices.
@@ -33,11 +40,39 @@ We are interested in the impact of smoking during pregnancy. Since it is not pos
 
 a.  Create a version of the `births14` data set dropping observations where there are `NA`s for `habit`. You can call this version `births14_habitgiven`.
 
+    ```{r}
+
+    births14_habitgiven <- births14 |>
+      filter(!is.na(habit))
+
+    ```
+
 b.  Plotting the data is a useful first step because it helps us quickly visualize trends, identify strong associations, and develop research questions. Create an appropriate plot displaying the relationship between `weight` and `habit`. In 2-3 sentences, discuss the relationships observed.
+
+    ```{r}
+      ggplot(births14_habitgiven, aes(x = habit, y = weight)) +
+        geom_boxplot()
+      
+    ```
+
+    **Non-smokers on appear to have a higher weight on average.**
 
 c.  Now, fit a linear model that predicts `weight` from `habit`. Provide the tidy summary output below.
 
+    ```{r}
+
+    births_fit <- linear_reg() |>
+      fit(weight ~ habit, data = births14_habitgiven)
+
+    tidy(births_fit)
+
+    ```
+
 d.  Write the estimated least squares regression line below using proper notation.
+
+    $$
+    \hat{Y} = 7.27 + -0.59X
+    $$
 
     ::: callout-tip
     If you need to type an equation using proper notation, type your answers in-between `$$` and `$$`. You may use `\hat{example}` to put a hat on a character.
@@ -47,11 +82,25 @@ d.  Write the estimated least squares regression line below using proper notatio
 
 a.  Another researcher is interested in assessing the relationship between babies’ weights and mothers’ ages. Fit another linear model to investigate this relationship. Provide the summary output below.
 
+    ```{r}
+
+    bm_fit <- linear_reg() |>
+      fit(weight ~ mage, data = births14_habitgiven)
+
+    tidy(bm_fit)
+    ```
+
 b.  In 2-3 sentences, explain how the regression line to model these data is fit, i.e., based on what criteria R determines the regression line.
+
+    **The regression line is fit based on slope and intercept of the function, and any residuals.**
 
 c.  Interpret the intercept in the context of the data and the research question. Is the intercept meaningful in this context? Why or why not?
 
+    **It is not meaningful, a lack of correlation shows no clear trend to form conclusion from.**
+
 d.  Interpret the slope in the context of the data and the research question.
+
+    **As the slope is close to 0, there appears to be no correlation between baby weight and the age of the mother.**
 
 # Part 2 - Parasites
 
